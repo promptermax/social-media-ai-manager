@@ -85,7 +85,7 @@ const templates = [
 
 const typeIcons = {
   post: FileText,
-  image: Image,
+  image: ImageIcon,
   video: Video,
   article: FileText,
 }
