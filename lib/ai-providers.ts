@@ -2,7 +2,7 @@
 // @ts-ignore
 import { OpenAIApi, Configuration as OpenAIConfig } from 'openai'
 // @ts-ignore
-import Anthropic from 'anthropic'
+import Anthropic from '@anthropic-ai/sdk'
 
 export type AIProvider = 'openai' | 'anthropic'
 

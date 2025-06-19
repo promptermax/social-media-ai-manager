@@ -65,7 +65,7 @@
     "vaul": "^0.9.6",
     "zod": "^3.24.1",
     "openai": "^4.30.0",
-    "anthropic": "^0.18.0"
+    "@anthropic-ai/sdk": "^0.54.0"
   },
   "devDependencies": {
     "@types/node": "^22",
