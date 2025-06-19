@@ -6,14 +6,29 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Button } from "@/components/ui/button"
 import { useState } from "react"
+import { aiRequest } from '@/hooks/useAIClient'
 
 const ContentPage = () => {
   const [prompt, setPrompt] = useState("")
   const [generatedContent, setGeneratedContent] = useState("")
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const handleGenerateContent = async () => {
-    // Placeholder for API call
-    setGeneratedContent("This is the generated content based on your prompt.")
+    setLoading(true)
+    setError(null)
+    try {
+      const result = await aiRequest({
+        type: 'text',
+        params: { prompt }, // Add other params as needed
+      })
+      setGeneratedContent(result)
+    } catch (err: any) {
+      setGeneratedContent('')
+      setError(err.message)
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -142,7 +157,13 @@ const ContentPage = () => {
             </div>
           </div>
 
-          <Button onClick={handleGenerateContent}>Generate Content</Button>
+          <Button onClick={handleGenerateContent} disabled={loading || !prompt.trim()}>
+            {loading ? 'Generating...' : 'Generate Content'}
+          </Button>
+
+          {error && (
+            <div className="text-red-500 text-sm mt-2">{error}</div>
+          )}
 
           {generatedContent && (
             <div className="mt-4">

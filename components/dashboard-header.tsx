@@ -1,7 +1,9 @@
-import { Bell, Settings, User, ChevronDown } from "lucide-react"
+"use client"
+
+import { Bell } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Badge } from "@/components/ui/badge"
+import { UserProfile } from "@/components/user-profile"
 
 export function DashboardHeader() {
   return (
@@ -23,25 +25,7 @@ export function DashboardHeader() {
               </Badge>
             </Button>
 
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="flex items-center space-x-2">
-                  <User className="h-5 w-5" />
-                  <span>John Doe</span>
-                  <ChevronDown className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem>
-                  <Settings className="mr-2 h-4 w-4" />
-                  Settings
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <User className="mr-2 h-4 w-4" />
-                  Profile
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <UserProfile />
           </div>
         </div>
       </div>

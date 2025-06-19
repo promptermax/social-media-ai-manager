@@ -21,107 +21,14 @@ export default function EnhancedContentPage() {
 
   const handleGenerate = async (prompt: string, documents: string[]) => {
     setIsGenerating(true)
-
-    // Simulate AI generation with document context
-    setTimeout(() => {
-      setGeneratedContent({
-        caption: `🚀 Exciting news from our AI-powered e-commerce platform! 
-
-Based on our business plan insights, we're targeting tech-savvy millennials aged 25-40 who value personalization and innovation. Our latest feature uses advanced AI to create truly personalized shopping experiences.
-
-This aligns perfectly with our goal to reach $2M revenue by end of 2024, and our key differentiator of AI-powered personalization is what sets us apart from CompanyA and CompanyB.
-
-What do you think about AI in e-commerce? Share your thoughts below! 👇
-
-#AIEcommerce #Personalization #Innovation #TechMillennials #EmpoweringBusinesses`,
-
-        hashtags: `#AIEcommerce #Personalization #Innovation #TechMillennials #EmpoweringBusinesses #AITechnology #SmartShopping #DigitalTransformation #CustomerExperience #FutureOfRetail #MachineLearning #DataDriven #UserExperience #TechTrends #BusinessGrowth`,
-
-        blog: `# The Future of AI-Powered E-commerce: Empowering Businesses Through Personalization
-
-*Based on our comprehensive business strategy and market research*
-
-## Executive Summary
-
-As outlined in our business plan, the e-commerce landscape is rapidly evolving, and AI-powered personalization has become the key differentiator for success. Our platform targets tech-savvy millennials aged 25-40, a demographic that values innovation and personalized experiences above traditional shopping methods.
-
-## Market Opportunity
-
-Our market research reveals that 73% of millennials are willing to pay premium prices for personalized experiences. This aligns perfectly with our revenue goal of $2M by end of 2024, positioning us strategically against competitors like CompanyA and CompanyB who still rely on traditional recommendation systems.
-
-## Our AI Advantage
-
-### Personalization at Scale
-Our AI technology analyzes user behavior, preferences, and purchase history to create unique shopping experiences for each customer. This isn't just about showing related products – it's about understanding the customer's lifestyle and needs.
-
-### Key Differentiators
-- **Advanced Machine Learning**: Unlike CompanyA's rule-based system
-- **Real-time Adaptation**: Instant personalization based on current session behavior  
-- **Cross-platform Integration**: Seamless experience across web and mobile
-- **Predictive Analytics**: Anticipating customer needs before they realize them
-
-## Brand Alignment
-
-This initiative perfectly embodies our brand message of "Empowering businesses through AI" while maintaining our professional yet approachable voice. Our target emotion of trust and innovation is reflected in every aspect of the user experience.
-
-## Looking Forward
-
-As we work toward our 2024 goals, AI-powered personalization will continue to be our north star, helping us build lasting relationships with our millennial customer base while driving sustainable revenue growth.
-
-*What are your thoughts on AI in e-commerce? How do you see personalization evolving in the next few years?*`,
-
-        strategy: `# AI-Enhanced Social Media Strategy
-*Generated using Business Plan 2024 and Brand Guidelines*
-
-## Strategic Overview
-Based on our business plan analysis, this strategy targets tech-savvy millennials (25-40) to achieve our $2M revenue goal by end of 2024.
-
-## Content Pillars
-1. **AI Innovation Showcase** (30%)
-   - Highlight our AI-powered personalization features
-   - Behind-the-scenes AI development content
-   - Customer success stories with AI
-
-2. **Millennial Lifestyle Content** (25%)
-   - Tech trends and insights
-   - Work-life balance solutions
-   - Sustainable shopping practices
-
-3. **Educational Content** (25%)
-   - AI in e-commerce tutorials
-   - Personalization benefits
-   - Industry thought leadership
-
-4. **Community Building** (20%)
-   - User-generated content
-   - Customer testimonials
-   - Interactive polls and Q&As
-
-## Platform Strategy
-- **Instagram**: Visual storytelling, behind-the-scenes, lifestyle content
-- **LinkedIn**: Thought leadership, B2B insights, professional content
-- **TikTok**: Quick AI demos, trend participation, younger millennial engagement
-- **Twitter**: Industry news, quick updates, customer service
-
-## Brand Voice Implementation
-- Professional yet approachable tone
-- Focus on trust and innovation
-- "Empowering businesses through AI" messaging
-- Use of primary colors: #2563EB, #F59E0B
-
-## Competitive Positioning
-- Emphasize AI personalization vs. CompanyA's basic recommendations
-- Highlight real-time adaptation vs. CompanyB's static approach
-- Position as innovation leader in the space
-
-## Success Metrics
-- Engagement rate: Target 8%+
-- Lead generation: 500 qualified leads/month
-- Brand awareness: 25% increase in brand mentions
-- Revenue attribution: 15% of $2M goal from social media`,
-      })
-      setIsGenerating(false)
-    }, 3000)
+    // Simulate AI generation with document context (remove setTimeout)
+    setGeneratedContent({
+      caption: `🚀 Exciting news from our AI-powered e-commerce platform! \n\nBased on our business plan insights, we're targeting tech-savvy millennials aged 25-40 who value personalization and innovation. Our latest feature uses advanced AI to create truly personalized shopping experiences.\n\nThis aligns perfectly with our goal to reach $2M revenue by end of 2024, and our key differentiator of AI-powered personalization is what sets us apart from CompanyA and CompanyB.\n\nWhat do you think about AI in e-commerce? Share your thoughts below! 👇\n\n#AIEcommerce #Personalization #Innovation #TechMillennials #EmpoweringBusinesses`,
+      hashtags: `#AIEcommerce #Personalization #Innovation #TechMillennials #EmpoweringBusinesses #AITechnology #SmartShopping #DigitalTransformation #CustomerExperience #FutureOfRetail #MachineLearning #DataDriven #UserExperience #TechTrends #BusinessGrowth`,
+      blog: `# The Future of AI-Powered E-commerce: Empowering Businesses Through Personalization\n\n*Based on our comprehensive business strategy and market research*\n\n## Executive Summary\n\nAs outlined in our business plan, the e-commerce landscape is rapidly evolving, and AI-powered personalization has become the key differentiator for success. Our platform targets tech-savvy millennials aged 25-40, a demographic that values innovation and personalized experiences above traditional shopping methods.\n\n## Market Opportunity\n\nOur market research reveals that 73% of millennials are willing to pay premium prices for personalized experiences. This aligns perfectly with our revenue goal of $2M by end of 2024, positioning us strategically against competitors like CompanyA and CompanyB who still rely on traditional recommendation systems.\n\n## Our AI Advantage\n\n### Personalization at Scale\nOur AI technology analyzes user behavior, preferences, and purchase history to create unique shopping experiences for each customer. This isn't just about showing related products – it's about understanding the customer's lifestyle and needs.\n\n### Key Differentiators\n- **Advanced Machine Learning**: Unlike CompanyA's rule-based system\n- **Real-time Adaptation**: Instant personalization based on current session behavior  \n- **Cross-platform Integration**: Seamless experience across web and mobile\n- **Predictive Analytics**: Anticipating customer needs before they realize them\n\n## Brand Alignment\n\nThis initiative perfectly embodies our brand message of "Empowering businesses through AI" while maintaining our professional yet approachable voice. Our target emotion of trust and innovation is reflected in every aspect of the user experience.\n\n## Looking Forward\n\nAs we work toward our 2024 goals, AI-powered personalization will continue to be our north star, helping us build lasting relationships with our millennial customer base while driving sustainable revenue growth.\n\n*What are your thoughts on AI in e-commerce? How do you see personalization evolving in the next few years?*`,
+      strategy: `# AI-Enhanced Social Media Strategy\n*Generated using Business Plan 2024 and Brand Guidelines*\n\n## Strategic Overview\nBased on our business plan analysis, this strategy targets tech-savvy millennials (25-40) to achieve our $2M revenue goal by end of 2024.\n\n## Content Pillars\n1. **AI Innovation Showcase** (30%)\n   - Highlight our AI-powered personalization features\n   - Behind-the-scenes AI development content\n   - Customer success stories with AI\n\n2. **Millennial Lifestyle Content** (25%)\n   - Tech trends and insights\n   - Work-life balance solutions\n   - Sustainable shopping practices\n\n3. **Educational Content** (25%)\n   - AI in e-commerce tutorials\n   - Personalization benefits\n   - Industry thought leadership\n\n4. **Community Building** (20%)\n   - User-generated content\n   - Customer testimonials\n   - Interactive polls and Q&As\n\n## Platform Strategy\n- **Instagram**: Visual storytelling, behind-the-scenes, lifestyle content\n- **LinkedIn**: Thought leadership, B2B insights, professional content\n- **TikTok**: Quick AI demos, trend participation, younger millennial engagement\n- **Twitter**: Industry news, quick updates, customer service\n\n## Brand Voice Implementation\n- Professional yet approachable tone\n- Focus on trust and innovation\n- "Empowering businesses through AI" messaging\n- Use of primary colors: #2563EB, #F59E0B\n\n## Competitive Positioning\n- Emphasize AI personalization vs. CompanyA's basic recommendations\n- Highlight real-time adaptation vs. CompanyB's static approach\n- Position as innovation leader in the space\n\n## Success Metrics\n- Engagement rate: Target 8%+\n- Lead generation: 500 qualified leads/month\n- Brand awareness: 25% increase in brand mentions\n- Revenue attribution: 15% of $2M goal from social media`,
+    })
+    setIsGenerating(false)
   }
 
   const copyToClipboard = (text: string) => {

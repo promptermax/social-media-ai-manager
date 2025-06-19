@@ -1,75 +1,53 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { ImageIcon, Video, PenTool, MessageCircle, Calendar, Sparkles } from "lucide-react"
+import { ImageIcon, Video, PenTool, MessageCircle } from "lucide-react"
 import Link from "next/link"
 
 const actions = [
   {
     title: "Generate Image",
-    description: "Create AI-powered graphics",
+    description: "AI-powered graphics",
     icon: ImageIcon,
     href: "/ai-generator/image",
-    color: "bg-blue-500 hover:bg-blue-600",
   },
   {
     title: "Create Video",
     description: "Generate reels and videos",
     icon: Video,
     href: "/ai-generator/video",
-    color: "bg-purple-500 hover:bg-purple-600",
   },
   {
     title: "Write Content",
     description: "AI captions and posts",
     icon: PenTool,
     href: "/ai-generator/content",
-    color: "bg-green-500 hover:bg-green-600",
   },
   {
     title: "Manage Messages",
     description: "Handle comments & DMs",
     icon: MessageCircle,
     href: "/messages",
-    color: "bg-orange-500 hover:bg-orange-600",
-  },
-  {
-    title: "Schedule Posts",
-    description: "Plan your content",
-    icon: Calendar,
-    href: "/scheduler",
-    color: "bg-indigo-500 hover:bg-indigo-600",
-  },
-  {
-    title: "AI Assistant",
-    description: "Get content ideas",
-    icon: Sparkles,
-    href: "/ai-assistant",
-    color: "bg-pink-500 hover:bg-pink-600",
   },
 ]
 
 export function QuickActions() {
   return (
-    <Card>
+    <Card className="rounded-2xl border border-gray-200">
       <CardHeader>
-        <CardTitle>Quick Actions</CardTitle>
+        <CardTitle className="font-bold text-xl">Quick Actions</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {actions.map((action) => (
-            <Link key={action.title} href={action.href}>
-              <Button
-                variant="outline"
-                className="h-auto p-4 flex flex-col items-center space-y-2 hover:shadow-md transition-shadow"
-              >
-                <div className={`p-2 rounded-lg ${action.color} text-white`}>
-                  <action.icon className="h-5 w-5" />
+            <Link key={action.title} href={action.href} className="block">
+              <div className="flex flex-col items-center justify-center p-6 bg-white rounded-xl border border-gray-200 h-full cursor-pointer transition-none">
+                <div className="p-3 mb-3 rounded-lg bg-blue-50 flex items-center justify-center">
+                  <action.icon className="h-7 w-7 text-blue-500" />
                 </div>
                 <div className="text-center">
-                  <div className="font-medium text-sm">{action.title}</div>
-                  <div className="text-xs text-gray-500">{action.description}</div>
+                  <div className="font-bold text-base mb-1">{action.title}</div>
+                  <div className="text-sm text-gray-500">{action.description}</div>
                 </div>
-              </Button>
+              </div>
             </Link>
           ))}
         </div>

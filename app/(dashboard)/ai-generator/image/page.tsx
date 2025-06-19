@@ -9,29 +9,31 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
 import { Loader2, Download, Share2, Wand2 } from "lucide-react"
+import { aiRequest } from '@/hooks/useAIClient'
 
 export default function ImageGenerator() {
   const [prompt, setPrompt] = useState("")
   const [style, setStyle] = useState("")
   const [isGenerating, setIsGenerating] = useState(false)
   const [generatedImages, setGeneratedImages] = useState<string[]>([])
+  const [error, setError] = useState<string | null>(null)
 
   const handleGenerate = async () => {
     if (!prompt.trim()) return
-
     setIsGenerating(true)
-
-    // Simulate AI image generation
-    setTimeout(() => {
-      const newImages = [
-        "/placeholder.svg?height=512&width=512",
-        "/placeholder.svg?height=512&width=512",
-        "/placeholder.svg?height=512&width=512",
-        "/placeholder.svg?height=512&width=512",
-      ]
-      setGeneratedImages(newImages)
+    setError(null)
+    try {
+      const images = await aiRequest({
+        type: 'image',
+        params: { prompt, style },
+      })
+      setGeneratedImages(images)
+    } catch (err: any) {
+      setError(err.message)
+      setGeneratedImages([])
+    } finally {
       setIsGenerating(false)
-    }, 3000)
+    }
   }
 
   return (
@@ -120,6 +122,10 @@ export default function ImageGenerator() {
                   )}
                 </div>
               </div>
+
+              {error && (
+                <div className="text-red-500 text-sm mb-2">{error}</div>
+              )}
             </CardContent>
           </Card>
         </div>

@@ -1,4 +1,5 @@
 import type { ReactNode } from "react"
+import { AppShell } from "@/components/app-shell"
 
 export default function DashboardLayout({
   children,
@@ -6,5 +7,5 @@ export default function DashboardLayout({
   children: ReactNode
 }) {
   // In a real app, you would check authentication here
-  return children
+  return <AppShell title="Dashboard">{children}</AppShell>
 }

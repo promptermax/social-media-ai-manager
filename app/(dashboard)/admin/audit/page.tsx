@@ -10,7 +10,18 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge"
 import { AlertTriangle, Shield, Activity, FileText, Download, Search, TrendingUp, TrendingDown } from "lucide-react"
 
-export default function AdminAuditPage() {
+// Add these imports for server-side session and redirect
+import { getServerSession } from "next-auth"
+import { authOptions } from "@/lib/auth"
+import { redirect } from "next/navigation"
+
+export default async function AdminAuditPage() {
+  // Server-side role check
+  const session = await getServerSession(authOptions)
+  if (!session || session.user.role !== "ADMIN") {
+    redirect("/dashboard")
+  }
+
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedTimeRange, setSelectedTimeRange] = useState("7d")
 
@@ -412,3 +423,5 @@ export default function AdminAuditPage() {
     </AppShell>
   )
 }
+
+

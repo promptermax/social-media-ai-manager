@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
 import { Loader2, Download, Share2, Video, Play } from "lucide-react"
+import { aiRequest } from '@/hooks/useAIClient'
 
 export default function VideoGenerator() {
   const [prompt, setPrompt] = useState("")
@@ -16,21 +17,24 @@ export default function VideoGenerator() {
   const [duration, setDuration] = useState("")
   const [isGenerating, setIsGenerating] = useState(false)
   const [generatedVideos, setGeneratedVideos] = useState<string[]>([])
+  const [error, setError] = useState<string | null>(null)
 
   const handleGenerate = async () => {
     if (!prompt.trim()) return
-
     setIsGenerating(true)
-
-    // Simulate AI video generation
-    setTimeout(() => {
-      const newVideos = [
-        "/placeholder.svg?height=400&width=600&text=Video+1",
-        "/placeholder.svg?height=400&width=600&text=Video+2",
-      ]
-      setGeneratedVideos(newVideos)
+    setError(null)
+    try {
+      const videos = await aiRequest({
+        type: 'video',
+        params: { prompt, style, duration },
+      })
+      setGeneratedVideos(videos)
+    } catch (err: any) {
+      setError(err.message)
+      setGeneratedVideos([])
+    } finally {
       setIsGenerating(false)
-    }, 5000)
+    }
   }
 
   return (
@@ -133,6 +137,10 @@ export default function VideoGenerator() {
                   )}
                 </div>
               </div>
+
+              {error && (
+                <div className="text-red-500 text-sm mb-2">{error}</div>
+              )}
             </CardContent>
           </Card>
         </div>
