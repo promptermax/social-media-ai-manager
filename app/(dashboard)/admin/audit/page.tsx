@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { AppShell } from "@/components/app-shell"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -9,11 +9,20 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
 import { AlertTriangle, Shield, Activity, FileText, Download, Search, TrendingUp, TrendingDown } from "lucide-react"
+import { format, isAfter, isBefore, startOfDay, endOfDay, startOfWeek, endOfWeek, startOfMonth, endOfMonth } from 'date-fns'
 
 // Add these imports for server-side session and redirect
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { redirect } from "next/navigation"
+
+const SEVERITY_OPTIONS = [
+  { value: '', label: 'All Severities' },
+  { value: 'info', label: 'Info' },
+  { value: 'warning', label: 'Warning' },
+  { value: 'error', label: 'Error' },
+  { value: 'success', label: 'Success' },
+]
 
 export default async function AdminAuditPage() {
   // Server-side role check
@@ -24,6 +33,88 @@ export default async function AdminAuditPage() {
 
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedTimeRange, setSelectedTimeRange] = useState("7d")
+  const [logs, setLogs] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
+  const [userFilter, setUserFilter] = useState('')
+  const [actionFilter, setActionFilter] = useState('')
+  const [resourceFilter, setResourceFilter] = useState('')
+  const [severityFilter, setSeverityFilter] = useState('')
+  const [search, setSearch] = useState('')
+  const [dateFrom, setDateFrom] = useState<string>('')
+  const [dateTo, setDateTo] = useState<string>('')
+
+  useEffect(() => {
+    fetchLogs()
+  }, [])
+
+  async function fetchLogs() {
+    setLoading(true)
+    try {
+      const res = await fetch('/api/audit/logs')
+      const data = await res.json()
+      setLogs(data.logs || [])
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  function filteredLogs() {
+    return logs.filter((log) => {
+      const created = new Date(log.createdAt)
+      return (
+        (!userFilter || log.user?.email === userFilter) &&
+        (!actionFilter || log.action === actionFilter) &&
+        (!resourceFilter || log.resource === resourceFilter) &&
+        (!severityFilter || log.severity === severityFilter) &&
+        (!dateFrom || isAfter(created, startOfDay(new Date(dateFrom)))) &&
+        (!dateTo || isBefore(created, endOfDay(new Date(dateTo)))) &&
+        (!search ||
+          log.details?.toLowerCase().includes(search.toLowerCase()) ||
+          log.resource?.toLowerCase().includes(search.toLowerCase()) ||
+          log.action?.toLowerCase().includes(search.toLowerCase()) ||
+          log.user?.name?.toLowerCase().includes(search.toLowerCase())
+        )
+      )
+    })
+  }
+
+  function exportCSV() {
+    const csv = [
+      ['Timestamp', 'User', 'Action', 'Resource', 'Details', 'Severity', 'IP', 'User Agent'].join(','),
+      ...filteredLogs().map((log) =>
+        [
+          format(new Date(log.createdAt), 'yyyy-MM-dd HH:mm:ss'),
+          log.user?.email || '',
+          log.action,
+          log.resource,
+          '"' + (log.details || '').replace(/"/g, '""') + '"',
+          log.severity || '',
+          log.ip || '',
+          log.userAgent || '',
+        ].join(',')
+      ),
+    ].join('\n')
+    const blob = new Blob([csv], { type: 'text/csv' })
+    const url = window.URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `audit-log-${new Date().toISOString().split('T')[0]}.csv`
+    a.click()
+  }
+
+  function setPreset(preset: 'today' | 'week' | 'month') {
+    const now = new Date()
+    if (preset === 'today') {
+      setDateFrom(format(startOfDay(now), 'yyyy-MM-dd'))
+      setDateTo(format(endOfDay(now), 'yyyy-MM-dd'))
+    } else if (preset === 'week') {
+      setDateFrom(format(startOfWeek(now), 'yyyy-MM-dd'))
+      setDateTo(format(endOfWeek(now), 'yyyy-MM-dd'))
+    } else if (preset === 'month') {
+      setDateFrom(format(startOfMonth(now), 'yyyy-MM-dd'))
+      setDateTo(format(endOfMonth(now), 'yyyy-MM-dd'))
+    }
+  }
 
   // Mock security events
   const securityEvents = [
@@ -101,6 +192,10 @@ export default async function AdminAuditPage() {
     a.click()
   }
 
+  const users = Array.from(new Set(logs.map((l) => l.user?.email).filter(Boolean)))
+  const actions = Array.from(new Set(logs.map((l) => l.action).filter(Boolean)))
+  const resources = Array.from(new Set(logs.map((l) => l.resource).filter(Boolean)))
+
   return (
     <AppShell title="Admin Audit & Compliance">
       <div className="grid gap-6">
@@ -111,8 +206,8 @@ export default async function AdminAuditPage() {
               <Input
                 placeholder="Search audit logs..."
                 className="pl-10 w-full md:w-80"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
               />
             </div>
           </div>
@@ -419,6 +514,105 @@ export default async function AdminAuditPage() {
             </div>
           </TabsContent>
         </Tabs>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Audit Trail</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-wrap gap-2 mb-4 items-center">
+              <Input
+                placeholder="Search details, user, action..."
+                value={search}
+                onChange={e => setSearch(e.target.value)}
+                className="w-64"
+              />
+              <Select value={userFilter} onValueChange={setUserFilter}>
+                <SelectTrigger className="w-48"><SelectValue placeholder="User" /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="">All Users</SelectItem>
+                  {users.map((u) => <SelectItem key={u} value={u}>{u}</SelectItem>)}
+                </SelectContent>
+              </Select>
+              <Select value={actionFilter} onValueChange={setActionFilter}>
+                <SelectTrigger className="w-40"><SelectValue placeholder="Action" /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="">All Actions</SelectItem>
+                  {actions.map((a) => <SelectItem key={a} value={a}>{a}</SelectItem>)}
+                </SelectContent>
+              </Select>
+              <Select value={resourceFilter} onValueChange={setResourceFilter}>
+                <SelectTrigger className="w-40"><SelectValue placeholder="Resource" /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="">All Resources</SelectItem>
+                  {resources.map((r) => <SelectItem key={r} value={r}>{r}</SelectItem>)}
+                </SelectContent>
+              </Select>
+              <Select value={severityFilter} onValueChange={setSeverityFilter}>
+                <SelectTrigger className="w-40"><SelectValue placeholder="Severity" /></SelectTrigger>
+                <SelectContent>
+                  {SEVERITY_OPTIONS.map((s) => <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>)}
+                </SelectContent>
+              </Select>
+              <Input
+                type="date"
+                value={dateFrom}
+                onChange={e => setDateFrom(e.target.value)}
+                className="w-36"
+                title="From date"
+              />
+              <Input
+                type="date"
+                value={dateTo}
+                onChange={e => setDateTo(e.target.value)}
+                className="w-36"
+                title="To date"
+              />
+              <Button variant="outline" onClick={() => setPreset('today')}>Today</Button>
+              <Button variant="outline" onClick={() => setPreset('week')}>This Week</Button>
+              <Button variant="outline" onClick={() => setPreset('month')}>This Month</Button>
+              <Button variant="outline" onClick={exportCSV}>
+                <Download className="mr-2 h-4 w-4" /> Export CSV
+              </Button>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="min-w-full text-sm">
+                <thead>
+                  <tr className="border-b">
+                    <th className="py-2 px-2 text-left">Timestamp</th>
+                    <th className="py-2 px-2 text-left">User</th>
+                    <th className="py-2 px-2 text-left">Action</th>
+                    <th className="py-2 px-2 text-left">Resource</th>
+                    <th className="py-2 px-2 text-left">Details</th>
+                    <th className="py-2 px-2 text-left">Severity</th>
+                    <th className="py-2 px-2 text-left">IP</th>
+                    <th className="py-2 px-2 text-left">User Agent</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {loading ? (
+                    <tr><td colSpan={8} className="text-center py-8 text-muted-foreground">Loading...</td></tr>
+                  ) : filteredLogs().length === 0 ? (
+                    <tr><td colSpan={8} className="text-center py-8 text-muted-foreground">No audit log entries found.</td></tr>
+                  ) : (
+                    filteredLogs().map((log) => (
+                      <tr key={log.id} className="border-b">
+                        <td className="py-2 px-2">{format(new Date(log.createdAt), 'yyyy-MM-dd HH:mm:ss')}</td>
+                        <td className="py-2 px-2">{log.user?.email}</td>
+                        <td className="py-2 px-2">{log.action}</td>
+                        <td className="py-2 px-2">{log.resource}</td>
+                        <td className="py-2 px-2">{log.details}</td>
+                        <td className="py-2 px-2">{log.severity}</td>
+                        <td className="py-2 px-2">{log.ip}</td>
+                        <td className="py-2 px-2">{log.userAgent}</td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </AppShell>
   )

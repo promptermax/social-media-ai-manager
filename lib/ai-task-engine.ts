@@ -18,6 +18,12 @@ function assessProvider(type: AITaskType, preferredProvider?: AIProvider): AIPro
 }
 
 export async function routeAIRequest({ type, params, preferredProvider }: RouteAIRequestParams): Promise<any> {
+  if (!process.env.OPENAI_API_KEY) {
+    throw new Error('OPENAI_API_KEY is not set in environment variables. Please add it to your .env file.');
+  }
+  if (!process.env.ANTHROPIC_API_KEY) {
+    throw new Error('ANTHROPIC_API_KEY is not set in environment variables. Please add it to your .env file.');
+  }
   const provider = assessProvider(type, preferredProvider)
   const apiKey =
     provider === 'openai'

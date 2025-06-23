@@ -89,4 +89,11 @@ export const authOptions: NextAuthOptions = {
     signUp: "/signup",
   },
   secret: process.env.NEXTAUTH_SECRET,
+}
+
+if (!process.env.NEXTAUTH_SECRET) {
+  throw new Error('NEXTAUTH_SECRET is not set in environment variables. Please add it to your .env file.');
+}
+if (!process.env.DATABASE_URL) {
+  throw new Error('DATABASE_URL is not set in environment variables. Please add it to your .env file.');
 } 

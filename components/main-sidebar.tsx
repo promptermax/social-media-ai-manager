@@ -19,6 +19,7 @@ import {
   LogOut,
   FileText,
   Activity,
+  Shield,
 } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
@@ -52,6 +53,14 @@ export function MainSidebar() {
   const { state } = useSidebar ? useSidebar() : { state: "expanded" }
 
   const isActive = (path: string) => pathname === path || pathname?.startsWith(path + "/")
+
+  const adminLinks = [
+    {
+      label: 'Audit Log',
+      href: '/admin/audit',
+      icon: Activity,
+    },
+  ]
 
   return (
     <>
