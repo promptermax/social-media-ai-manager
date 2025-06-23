@@ -1,4 +1,4 @@
-import { csrf } from 'next-csrf';
+import csrf from 'next-csrf';
 
 const options = {
   secret: process.env.CSRF_SECRET || 'your-csrf-secret-key-change-in-production',

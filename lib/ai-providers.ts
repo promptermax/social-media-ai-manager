@@ -1,7 +1,5 @@
 // OpenAI and Anthropic provider adapters for text and image generation
-// @ts-ignore
-import { OpenAIApi, Configuration as OpenAIConfig } from 'openai'
-// @ts-ignore
+import OpenAI from 'openai'
 import Anthropic from '@anthropic-ai/sdk'
 
 export type AIProvider = 'openai' | 'anthropic'
@@ -26,9 +24,9 @@ export interface AIProviderAdapter {
 
 // OpenAI Adapter
 export class OpenAIAdapter implements AIProviderAdapter {
-  private openai: OpenAIApi
+  private openai: OpenAI
   constructor(apiKey: string) {
-    this.openai = new OpenAIApi(new OpenAIConfig({ apiKey }))
+    this.openai = new OpenAI({ apiKey })
   }
   async generateText(params: AITextGenerationParams): Promise<string> {
     // TODO: Implement with openai.chat.completions.create
