@@ -14,6 +14,9 @@ importers:
       '@auth/prisma-adapter':
         specifier: ^2.9.1
         version: 2.9.1(@prisma/client@6.10.1(prisma@6.10.1(typescript@5.8.3))(typescript@5.8.3))
+      '@edge-csrf/nextjs':
+        specifier: 2.5.3-cloudflare-rc1
+        version: 2.5.3-cloudflare-rc1(next@15.2.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0))
       '@hookform/resolvers':
         specifier: ^3.9.1
         version: 3.10.0(react-hook-form@7.58.1(react@19.1.0))
@@ -237,6 +240,12 @@ packages:
   '@babel/runtime@7.27.6':
     resolution: {integrity: sha512-vbavdySgbTTrmFE+EsiqUTzlOr5bzlnJtUv9PynGCAKvfQqjIXbvFdumPM/GxMDfyuGMJaJAU6TO4zc1Jf1i8Q==}
     engines: {node: '>=6.9.0'}
+
+  '@edge-csrf/nextjs@2.5.3-cloudflare-rc1':
+    resolution: {integrity: sha512-sH8HKl2s/zFkIgXcVzODljHsBhKW7LN2gXeUNEQTSP31Chy40ryjR7iTf0MA/DtPhOpXUkd6IBUMMF820sK+rA==}
+    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
+    peerDependencies:
+      next: ^13.0.0 || ^14.0.0 || ^15.0.0
 
   '@emnapi/runtime@1.4.3':
     resolution: {integrity: sha512-pBPWdu6MLKROBX05wSNKcNb++m5Er+KQ9QkB+WVM+pW2Kx9hoSrVTnu3BdkI5eBLZoKu/J6mW/B6i6bJB2ytXQ==}
@@ -2266,6 +2275,10 @@ snapshots:
       - nodemailer
 
   '@babel/runtime@7.27.6': {}
+
+  '@edge-csrf/nextjs@2.5.3-cloudflare-rc1(next@15.2.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0))':
+    dependencies:
+      next: 15.2.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
 
   '@emnapi/runtime@1.4.3':
     dependencies:
