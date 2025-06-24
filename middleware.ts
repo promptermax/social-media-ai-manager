@@ -1,15 +1,19 @@
 import { withAuth } from "next-auth/middleware"
 import { NextResponse } from "next/server"
-import { csrfMiddleware } from "./lib/csrf"
+import { csrf } from './lib/csrf'
+import type { NextRequest } from 'next/server'
 
 export default withAuth(
-  function middleware(req) {
+  async function middleware(req) {
     // Apply CSRF protection to API routes
     if (req.nextUrl.pathname.startsWith('/api/')) {
-      return csrfMiddleware(req)
+      // Use the response from csrf (which is a function)
+      const apiResponse = NextResponse.next();
+      await csrf.protect(req, apiResponse);
+      return apiResponse;
     }
     
-    // Add security headers for all routes
+    // Add security headers for all non-API routes
     const response = NextResponse.next()
     
     // Security headers
