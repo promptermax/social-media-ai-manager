@@ -9,8 +9,10 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
+  serverExternalPackages: ['@prisma/client', 'prisma'],
   experimental: {
-    serverComponentsExternalPackages: ['@prisma/client', 'prisma'],
+    // Keep other experimental features here if you add any in the future.
+    // For now, this section might become empty or be removed if no other experimental features are used.
   },
 }
 
