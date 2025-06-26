@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { toast } from '@/hooks/use-toast'
-import { UserRole } from '@prisma/client'
+import { UserRole } from '@/lib/dummy-data'
 
 const TEAM_ID = 'mock-team-id' // TODO: Replace with real teamId from context or props
 

@@ -1,8 +1,9 @@
 import { NextAuthOptions } from "next-auth"
-import { PrismaAdapter } from "@auth/prisma-adapter"
+// import { PrismaAdapter } from "@auth/prisma-adapter"
 import CredentialsProvider from "next-auth/providers/credentials"
+// import { prisma } from "./prisma"
+import { dummyUsers } from "./dummy-data"
 import bcrypt from "bcryptjs"
-import { prisma } from "./prisma"
 
 // TODO: Uncomment and configure these providers when you have credentials
 // import FacebookProvider from "next-auth/providers/facebook"
@@ -10,7 +11,7 @@ import { prisma } from "./prisma"
 // import LinkedInProvider from "next-auth/providers/linkedin"
 
 export const authOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(prisma),
+  // adapter: PrismaAdapter(prisma),
   providers: [
     CredentialsProvider({
       name: "credentials",
@@ -23,32 +24,24 @@ export const authOptions: NextAuthOptions = {
           return null
         }
 
-        const user = await prisma.user.findUnique({
-          where: {
-            email: credentials.email
+        // DUMMY AUTH: Use predefined dummy accounts
+        // Email: john@example.com (Admin), jane@example.com (Team Lead), mike@example.com (Team Member)
+        // Password: Any password works for demo
+        
+        const user = dummyUsers.find(u => u.email === credentials.email)
+        
+        if (user) {
+          // For dummy data, any password works - no real verification
+          return {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            role: user.role,
+            image: user.image
           }
-        })
-
-        if (!user || !user.password) {
-          return null
         }
 
-        const isPasswordValid = await bcrypt.compare(
-          credentials.password,
-          user.password
-        )
-
-        if (!isPasswordValid) {
-          return null
-        }
-
-        return {
-          id: user.id,
-          email: user.email,
-          name: user.name,
-          image: user.image,
-          role: user.role,
-        }
+        return null
       }
     }),
     // FacebookProvider({
@@ -71,29 +64,29 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.role = user.role
-        token.id = user.id
+        return {
+          ...token,
+          role: user.role
+        }
       }
       return token
     },
     async session({ session, token }) {
-      if (token) {
-        session.user.id = token.id as string
-        session.user.role = token.role as string
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          id: token.sub,
+          role: token.role
+        }
       }
-      return session
     }
   },
   pages: {
     signIn: "/login",
-    signUp: "/signup",
+    signUp: "/signup"
   },
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: process.env.NEXTAUTH_SECRET || "dummy-secret-for-development"
 }
 
-if (!process.env.NEXTAUTH_SECRET) {
-  throw new Error('NEXTAUTH_SECRET is not set in environment variables. Please add it to your .env file.');
-}
-if (!process.env.DATABASE_URL) {
-  throw new Error('DATABASE_URL is not set in environment variables. Please add it to your .env file.');
-} 
+// Environment checks removed for dummy data setup 

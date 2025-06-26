@@ -1,9 +1,6 @@
-import { PrismaClient } from '@prisma/client'
+// Temporary replacement for Prisma with dummy data
+// This will be replaced with Supabase in the future
 
-const globalForPrisma = globalThis as unknown as {
-  prisma: PrismaClient | undefined
-}
+import { mockDB } from './dummy-data'
 
-export const prisma = globalForPrisma.prisma ?? new PrismaClient()
-
-if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma 
+export const prisma = mockDB 
